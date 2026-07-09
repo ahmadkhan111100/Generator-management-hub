@@ -198,3 +198,157 @@ with tabs[0]:
                             chosen_part = "None"
                             qty_used = 0
                             parts_cost = 0.0
+                                st.markdown("---")
+    if st.button("➡️ View Financial Ledgers Panel", key="nav_to_tab3"):
+        st.info("Please click '🧾 Financial Ledgers' at the top of the dashboard to continue.")
+    st.markdown("---")
+    if st.button("➡️ Proceed to Log Complaint Form", key="nav_to_tab2"):
+        st.info("Please manually select the next tab above to proceed.")
+import sqlite3
+import streamlit as st
+from datetime import datetime
+
+DB_NAME = "maintenance_system.db"
+
+def init_ledger_db():
+    """Initializes the database ledger schema if it does not exist."""
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS ledger (
+            invoice_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            ticket_id INTEGER,
+            client_name TEXT,
+            amount REAL,
+            status TEXT,
+            outstanding_balance REAL,
+            created_at TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+def render_financial_ledger():
+    """Renders the dashboard UI and logic for the financial ledger."""
+    st.header("🧾 Financial Ledgers & Processing Hub")
+    init_ledger_db()
+
+    # --- Ledger Overview Metrics ---
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT SUM(amount) FROM ledger")
+    total_invoiced = cursor.fetchone()[0] or 0.0
+    
+    cursor.execute("SELECT SUM(outstanding_balance) FROM ledger")
+    total_outstanding = cursor.fetchone()[0] or 0.0
+    
+    conn.close()
+    
+    total_collected = total_invoiced - total_outstanding
+
+    metric_col1, metric_col2, metric_col3 = st.columns(3)
+    with metric_col1:
+        st.metric("Total Invoiced", f"${total_invoiced:,.2f}")
+    with metric_col2:
+        st.metric("Total Collected", f"${total_collected:,.2f}", delta_color="normal")
+    with metric_col3:
+        st.metric("Total Outstanding", f"${total_outstanding:,.2f}", delta="-Remaining")
+
+    st.markdown("---")
+
+    # --- Filtering and Queries ---
+    filter_status = st.selectbox(
+        "Filter Transactions By Status", 
+        ["All Records", "Ready for Submission", "Dispatched", "Partially Paid", "Paid"]
+    )
+
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    
+    if filter_status == "All Records":
+        cursor.execute("SELECT * FROM ledger ORDER BY invoice_id DESC")
+    else:
+        cursor.execute("SELECT * FROM ledger WHERE status=? ORDER BY invoice_id DESC", (filter_status,))
+        
+    ledgers = cursor.fetchall()
+    conn.close()
+
+    # --- Data Rendering Loop ---
+    if not ledgers:
+        st.info(f"No recorded ledger transactions currently found matching: **{filter_status}**")
+    else:
+        for row in ledgers:
+            inv_id, ticket_id, client_name, amount, status, balance, created_at = row
+            
+            with st.container(border=True):
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.subheader(f"Invoice #{inv_id}")
+                    st.caption(f"**Associated Ticket:** #{ticket_id}")
+                    st.caption(f"**Generated On:** {created_at}")
+                    
+                with col2:
+                    st.write(f"**Client Profile:** {client_name}")
+                    st.write(f"**Gross Amount:** ${amount:,.2f}")
+                    st.write(f"**Outstanding Balance:** ${balance:,.2f}")
+                    
+                    if status == "Paid":
+                        st.markdown("**Payment Status:** :green[Paid]")
+                    elif status in ["Dispatched", "Partially Paid"]:
+                        st.markdown(f"**Payment Status:** :orange[{status}]")
+                    else:
+                        st.markdown(f"**Payment Status:** :red[{status}]")
+                        
+                with col3:
+                    # Context Action A: Dispatching Initial Invoice
+                    if status == "Ready for Submission":
+                        if st.button("📨 Dispatch Invoice to Client", key=f"disp_inv_{inv_id}"):
+                            conn = sqlite3.connect(DB_NAME)
+                            cursor = conn.cursor()
+                            today_str = datetime.now().strftime('%Y-%m-%d')
+                            cursor.execute("UPDATE ledger SET status='Dispatched' WHERE invoice_id=?", (inv_id,))
+                            cursor.execute("UPDATE tickets SET dispatched_at=? WHERE ticket_id=?", (today_str, ticket_id))
+                            conn.commit()
+                            conn.close()
+                            
+                            st.toast(f"Invoice #{inv_id} successfully marked as dispatched!")
+                            st.rerun()
+                            
+                    # Context Action B: Log incoming collection payments
+                    elif status in ["Dispatched", "Partially Paid"] and balance > 0:
+                        payment = st.number_input(
+                            "Record Incoming Collection ($)", 
+                            max_value=float(balance), 
+                            min_value=0.0, 
+                            step=50.0,
+                            key=f"pay_in_{inv_id}"
+                        )
+                        
+                        if st.button("💰 Log Payment", key=f"log_pay_{inv_id}"):
+                            if payment > 0:
+                                conn = sqlite3.connect(DB_NAME)
+                                cursor = conn.cursor()
+                                new_bal = float(balance) - payment
+                                new_stat = "Paid" if new_bal <= 0 else "Partially Paid"
+                                
+                                cursor.execute(
+                                    "UPDATE ledger SET outstanding_balance=?, status=? WHERE invoice_id=?", 
+                                    (new_bal, new_stat, inv_id)
+                                )
+                                conn.commit()
+                                conn.close()
+                                
+                                st.success(f"Successfully processed collection payment of ${payment:,.2f}!")
+                                st.rerun()
+                            else:
+                                st.error("Collection record amount must be higher than $0.00")
+                    else:
+                        st.write("🔒 *No manual actions pending for this ledger item.*")
+
+# Standalone runner logic for direct test executions
+if __name__ == "__main__":
+    st.set_page_config(page_title="Financial Ledger Test Shell", layout="wide")
+    render_financial_ledger()
+
