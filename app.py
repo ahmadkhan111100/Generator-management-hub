@@ -162,7 +162,7 @@ with tab2:
         c_name = st.text_input("Client/Branch Corporation Name")
         c_email = st.text_input("Client Communication Email Address")
         c_area = st.selectbox("Concerns City Area Team Assignment Location", STATIONS_LIST)
-        if st.form_submit_with_clicks("Register System Ticket"):
+if st.form_submit_button("Register System Ticket"):
             if c_name and c_email:
                 conn = sqlite3.connect(DB_NAME)
                 cursor = conn.cursor()
