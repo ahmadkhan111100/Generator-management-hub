@@ -47,7 +47,7 @@ def trigger_system_email(to_email, subject, body):
 st.set_page_config(page_title="FSM Generator Ticketing System", layout="wide")
 init_db()
 
-st.title("⚙️ Generator Field Service & Automated Ledger Hub")
+st.title("⚙️ Zubair Enterprises & Automated Ledger Hub")
 st.markdown("Fully managed ticketing, escalation pipeline, automated invoicing, and collection reminders.")
 
 st.sidebar.header("🛠️ System Diagnostics")
