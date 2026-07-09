@@ -335,3 +335,23 @@ with tab3:
     cursor.execute("SELECT * FROM ledger ORDER BY invoice_id DESC")
     ledgers = cursor.fetchall()
     conn.close()
+    # Initialize session state for tracking active views if not already present
+if "active_tab" not in st.session_state:
+    st.session_state.active_tab = "🎫 Open Active Tickets"
+
+# Assign variables to the structural tabs layout element with a dedicated key bind
+tabs = st.tabs(["🎫 Open Active Tickets", "➕ Log New Complaint", "🧾 Financial Ledgers", "⚙️ Hub Management"])
+    st.markdown("---")
+    if st.button("➡️ Proceed to Log Complaint Form", key="nav_to_tab2"):
+        st.info("Please manually select the next tab above to proceed.")
+
+
+    st.markdown("---")
+    if st.button("➡️ View Financial Ledgers Panel", key="nav_to_tab3"):
+        st.info("Please click '🧾 Financial Ledgers' at the top of the dashboard to continue.")
+    st.markdown("---")
+    if st.button("➡️ Open Inventory & Client Controls", key="nav_to_tab4"):
+        st.info("Please select '⚙️ Hub Management' from the top structural tabs menu.")
+    st.markdown("---")
+    if st.button("↩️ Return to Operations Board", key="nav_to_tab1"):
+        st.info("Please select '🎫 Open Active Tickets' at the top menu to view recent changes.")
