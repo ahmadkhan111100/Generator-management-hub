@@ -185,7 +185,7 @@ with tab3:
     conn.close()
 
        if not ledgers:
-        st.info("No recorded ledger transactions currently found.")
+           st.info("No recorded ledger transactions currently found.")
     else:
         for l in ledgers:
             # Replace 'None' below with whatever you want to happen if the status is already 'Paid'
