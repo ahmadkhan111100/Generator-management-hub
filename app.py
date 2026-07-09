@@ -188,4 +188,17 @@ with tab3:
         st.info("No recorded ledger transactions currently found.")
     else:
         for l in ledgers:
+                                elif status in ["Dispatched", "Partially Paid"] and balance > 0:
+                        payment = st.number_input("Record Incoming Collection ($)", max_value=float(balance), min_value=0.0, key=f"pay_in_{inv_id}")
+                        if st.button("💰 Log Payment", key=f"log_pay_{inv_id}"):
+                            conn = sqlite3.connect(DB_NAME)
+                            cursor = conn.cursor()
+                            new_bal = float(balance) - payment
+                            new_stat = "Paid" if new_bal <= 0 else "Partially Paid"
+                            cursor.execute("UPDATE ledger SET outstanding_balance=?, status=? WHERE invoice_id=?", (new_bal, new_stat, inv_id))
+                            conn.commit()
+                            conn.close()
+                            st.success(f"Logged payment of ${payment}.")
+                            st.rerun()
+
 
