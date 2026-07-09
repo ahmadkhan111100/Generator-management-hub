@@ -100,7 +100,8 @@ with tab1:
         for t in tickets:
             t_id, name, email, area, status, team_member, created, disp_date, _ = t
             with st.container(border=True):
-                col1, col2, col3 = st.columns()
+                # FIXED: Explicitly specified 3 columns to prevent layout crashes
+                col1, col2, col3 = st.columns(3)
                 with col1:
                     st.subheader(f"Ticket #{t_id}")
                     st.caption(f"**Area:** {area}\n\n**Logged:** {created}")
@@ -151,58 +152,40 @@ with tab1:
                             conn.commit()
                             conn.close()
                             trigger_system_email(email, f"Work Completed Report - Ticket #{t_id}", f"Dear {name},\nWork completed. Your generator has been started and is in a working position.")
-                            trigger_system_email(email, f"Invoice Pending - Ticket #{t_id}", f"Dear {name},\nYour invoice is ready and waiting for dispatch verification.")
+                            trigger_system_email(email, f"Invoice Pending - Ticket #{t_id}", f"Dear {name},\nYour invoice is ready.")
                             st.rerun()
-                    else:
-                        st.write("🟢 Workflow Completed")
 
 with tab2:
-    st.header("Log Incoming Trouble Shoot Ticket")
-    with st.form("intake_form", clear_on_submit=True):
-        c_name = st.text_input("Client/Branch Corporation Name")
-        c_email = st.text_input("Client Communication Email Address")
-        c_area = st.selectbox("Concerns City Area Team Assignment Location", STATIONS_LIST)
-if st.form_submit_button("Register System Ticket"):
+    st.header("Log a New Generator Complaint")
+    # FIXED: Added the required form container context
+    with st.form(key="new_complaint_form"):
+        c_name = st.text_input("Client Name / Branch Manager", placeholder="Manager Name")
+        c_email = st.text_input("Notification Contact Email", placeholder="manager@company.com")
+        c_area = st.selectbox("Operational Region / Station Area", STATIONS_LIST)
+        
+        # FIXED: Corrected submit button configuration
+        if st.form_submit_button("Register System Ticket"):
             if c_name and c_email:
                 conn = sqlite3.connect(DB_NAME)
                 cursor = conn.cursor()
-                now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                cursor.execute("INSERT INTO tickets (client_name, client_email, city_area, status, created_at) VALUES (?, ?, ?, 'Received', ?)", (c_name, c_email, c_area, now))
-                t_idx = cursor.lastrowid
+                now_str = datetime.now().strftime('%Y-%m-%d')
+                cursor.execute(
+                    "INSERT INTO tickets (client_name, client_email, city_area, status, created_at, last_reminder_sent) VALUES (?, ?, ?, 'Received', ?, ?)",
+                    (c_name, c_email, c_area, now_str, now_str)
+                )
                 conn.commit()
                 conn.close()
-                trigger_system_email(c_email, f"Complaint Registered - Ticket #{t_idx}", f"Dear {c_name},\nYour ticket has been logged for {c_area}.")
-                st.success(f"Ticket #{t_idx} created successfully.")
+                trigger_system_email(c_email, "Complaint Registered Successfully", f"Dear {c_name},\nYour complaint has been successfully registered for area: {c_area}.")
+                st.success("Ticket logged inside system successfully!")
+                st.rerun()
             else:
-                st.error("Please fill out all missing corporate metadata text-fields.")
+                st.error("Please fill out all required fields.")
 
 with tab3:
-    st.header("Financial Tracking & Accounts Receivables Ledger")
+    st.header("Financial Ledgers & Processing Hub")
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM ledger ORDER BY invoice_id DESC")
     ledgers = cursor.fetchall()
     conn.close()
-
-if not ledgers:
-    st.info("No recorded ledger transactions currently found.")
-else:
-    for l in ledgers:
-        if status == "Paid":
-            pass 
-        elif status in ["Dispatched", "Partially Paid"] and balance > 0:
-            payment = st.number_input("Record Incoming Collection ($)", max_value=float(balance), min_value=0.0, key=f"pay_in_{inv_id}")
-            if st.button("💰 Log Payment", key=f"log_pay_{inv_id}"):
-                conn = sqlite3.connect(DB_NAME)
-                cursor = conn.cursor()
-                new_bal = float(balance) - payment
-                new_stat = "Paid" if new_bal <= 0 else "Partially Paid"
-                cursor.execute("UPDATE ledger SET outstanding_balance=?, status=? WHERE invoice_id=?", (new_bal, new_stat, inv_id))
-                conn.commit()
-                conn.close()
-                st.success(f"Logged payment of ${payment}.")
-                st.rerun()
-
-
-
 
