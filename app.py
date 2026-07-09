@@ -198,7 +198,7 @@ with tabs[0]:
                             chosen_part = "None"
                             qty_used = 0
                             parts_cost = 0.0
-                                st.markdown("---")
+    st.markdown("---")
     if st.button("➡️ View Financial Ledgers Panel", key="nav_to_tab3"):
         st.info("Please click '🧾 Financial Ledgers' at the top of the dashboard to continue.")
     st.markdown("---")
