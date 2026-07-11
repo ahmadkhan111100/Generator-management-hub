@@ -11,11 +11,11 @@ st.write("Pehle data enter karein, phir review tab mein ja kar data check karke 
 
 # 1. BACKUP PROFORMA DATA
 branch_proforma = {
-    "BR-001": "Lahore Main Office",
-    "BR-002": "Karachi Saddar Branch",
-    "BR-003": "Islamabad Blue Area",
-    "BR-004": "Faisalabad Clock Tower",
-    "BR-005": "Multan Cantt Branch"
+    "1520": "Lahore Main Office",
+    "1545": "Karachi Saddar Branch",
+    "1680": "Islamabad Blue Area",
+    "0620": "Faisalabad Clock Tower",
+    "5009": "Multan Cantt Branch"
 }
 
 project_list = ["Project Alpha", "Project Beta", "Project Delta", "Project Titan"]
