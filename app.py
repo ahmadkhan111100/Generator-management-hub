@@ -3,6 +3,108 @@ import pandas as pd
 from datetime import datetime
 import os
 
+# Page layout configuration
+st.set_page_config(page_title="Data Entry Forum", page_icon="📝", layout="centered")
+
+# Main Title
+st.title("📋 Data Entry Forum")
+st.write("Enter the required details below and click 'Save Entry'.")
+
+# 1. BACKUP PROFORMA (Data source for automated branch names)
+branch_proforma = {
+    "BR-001": "Lahore Main Office",
+    "BR-002": "Karachi Saddar Branch",
+    "BR-003": "Islamabad Blue Area",
+    "BR-004": "Faisalabad Clock Tower",
+    "BR-005": "Multan Cantt Branch"
+}
+
+project_list = ["Project Alpha", "Project Beta", "Project Delta", "Project Titan"]
+team_list = ["Ali Khan", "Zainab Ahmed", "Bilal Siddiqui", "Hamza Usman"]
+
+# -----------------------------------------------------------------
+# 🧱 EMPTY INPUT FORM
+# -----------------------------------------------------------------
+# clear_on_submit=True se data save hote hi form dobara khali ho jaye ga
+with st.form("empty_entry_form", clear_on_submit=True):
+    
+    # 1. Date Field (With Calendar Dropdown)
+    comp_date = st.date_input("Select Date:", datetime.today())
+    
+    # 2. Project Name Selection
+    project = st.selectbox("Select Project Name:", [""] + project_list)
+    
+    # 3. Branch Code Selection
+    b_code = st.selectbox("Select Branch Code:", [""] + list(branch_proforma.keys()))
+    
+    # Automated Branch Name (Fetches automatically when Branch Code is selected)
+    b_name = branch_proforma.get(b_code, "")
+    st.text_input("Branch Name (Automated):", value=b_name, disabled=True)
+    
+    # 4. Generator Technical Details
+    capacity = st.text_input("Generator Capacity (e.g., 50 KVA):")
+    rating = st.text_input("Generator Rating (e.g., Prime / Standby):")
+    
+    # 5. Team Member Assignment
+    assigned_team = st.selectbox("Assign To (Team Member):", [""] + team_list)
+    
+    # 6. Remarks / Complaint Details
+    remarks = st.text_area("Remarks / Complaint Description:")
+    
+    # Submit Button
+    submitted = st.form_submit_button("💾 Save Entry & Generate SMS")
+
+# -----------------------------------------------------------------
+# 💾 SAVE DATA TO EXCEL & LOG SMS
+# -----------------------------------------------------------------
+if submitted:
+    # Validation: Ensure important fields are not left empty
+    if not (project and b_code and capacity and rating and assigned_team):
+        st.error("❌ Error! Please fill all the fields before saving.")
+    else:
+        # Create a dictionary of the entered data
+        input_data = {
+            "Date": [comp_date.strftime("%Y-%m-%d")],
+            "Project Name": [project],
+            "Branch Code": [b_code],
+            "Branch Name": [b_name],
+            "Generator Capacity": [capacity],
+            "Rating": [rating],
+            "Assigned Team Member": [assigned_team],
+            "Remarks": [remarks]
+        }
+        
+        # Convert to Pandas DataFrame
+        df_new = pd.DataFrame(input_data)
+        excel_file = "complaints.xlsx"
+        
+        # If Excel file already exists, append data; otherwise create new file
+        if os.path.exists(excel_file):
+            df_old = pd.read_excel(excel_file)
+            df_final = pd.concat([df_old, df_new], ignore_index=True)
+        else:
+            df_final = df_new
+            
+        # Save to Excel file
+        df_final.to_excel(excel_file, index=False)
+        
+        # Display Success Message
+        st.success("🎉 Success! Data has been successfully saved to the Excel database.")
+        
+        # Show Generated SMS on Screen
+        st.markdown("### 📱 Dispatched SMS Preview")
+        st.info(f"""
+        **To:** {assigned_team}  
+        **Message:** Nayi complaint assign hui hai.  
+        * **Branch:** {b_name} ({b_code})  
+        * **Capacity/Rating:** {capacity} / {rating}  
+        * **Remarks:** {remarks if remarks else 'None'}
+        """)
+import streamlit as st
+import pandas as pd
+from datetime import datetime
+import os
+
 # Page Settings
 st.set_page_config(page_title="Data Entry Hub", page_icon="📝", layout="wide")
 
