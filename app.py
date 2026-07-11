@@ -18,7 +18,7 @@ branch_proforma = {
     "5009": "Multan Cantt Branch"
 }
 
-project_list = ["Project Alpha", "Project Beta", "Project Delta", "Project Titan"]
+project_list = ["<MCB BANK LIMITED", "HBL BANK LIMITED", "MCB ISLAMIC BANK LIMITED", "BANK LFALAH LIMITED"]
 team_list = ["Ali Khan", "Zainab Ahmed", "Bilal Siddiqui", "Hamza Usman"]
 
 # Initialize Session State to hold data temporarily before final saving
