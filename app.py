@@ -12,7 +12,7 @@ st.write("Meharbani karke complaint ki tafseelat darj karein.")
 
 # 1. Backup Proforma Data (Branch Codes & Names)
 branch_proforma = {
-    "BR-001": "Lahore Main Office",
+    "0252": "Lahore Main Office",
     "BR-002": "Karachi Saddar Branch",
     "BR-003": "Islamabad Blue Area",
     "BR-004": "Faisalabad Clock Tower",
