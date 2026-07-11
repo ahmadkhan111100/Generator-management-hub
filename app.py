@@ -292,15 +292,15 @@ images/
 requirements.txt
 documents/
 images/
-    ├── logo.png
-    ├── hero.jpg
-    ├── about.jpg
-    ├── power.jpg
-    ├── machinery.jpg
-    ├── solar.jpg
-    ├── parts.jpg
-    ├── engines.jpg
-    └── construction.jpg
+     logo.png
+     hero.jpg
+     about.jpg
+     power.jpg
+     machinery.jpg
+     solar.jpg
+     parts.jpg
+     engines.jpg
+     construction.jpg
     /* ==========================================
    F&A ENTERPRISES
    Professional Corporate Theme
