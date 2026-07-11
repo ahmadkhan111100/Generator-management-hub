@@ -311,11 +311,9 @@ footer{
 ------------------------- */
 
 .toptext{
-    text-align:center;
     padding-top:15px;
-}
-
-.toptext h1{
+    text-align:center;
+}.toptext h1{
     color:#111;
     font-size:42px;
     font-weight:800;
