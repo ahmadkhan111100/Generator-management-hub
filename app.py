@@ -39,7 +39,7 @@ with st.form("complaint_form", clear_on_submit=True):
     st.text_input("Branch Name (Automated):", value=b_name, disabled=True)
     
     # Generator Details
-    capacity = st.text_input("Generator Capacity:20 KVA")
+    capacity = st.text_input("Generator Capacity:")
     rating = st.text_input("Generator Rating:")
     
     # Assigned Team Member Dropdown
@@ -51,10 +51,6 @@ with st.form("complaint_form", clear_on_submit=True):
     # Submit Button
     submitted = st.form_submit_button("Submit & Send SMS Alert")
 
-# ---- ACTIONS ON SUBMIT ----
-if submitted:
-    if not (project and b_code and capacity and rating and assigned_team):
-        st.error("❌ Meharbani karke tamam zaroori fields fill karein!")
     else:
         # Data structure for saving
         new_data = {
