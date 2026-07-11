@@ -287,11 +287,13 @@ Operation & Maintenance | Electrical | Mechanical | Solar Solutions
 </center>
 
 """,unsafe_allow_html=True)
+│
+├──
+└──
 generator-management-hub/
-│
-├── app.py
-├── style.css      ← (Part 2)
-│
+images/
+requirements.txt
+documents/
 └── images/
     ├── logo.png
     ├── hero.jpg
