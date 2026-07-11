@@ -19,8 +19,8 @@ branch_proforma = {
     "BR-005": "Multan Cantt Branch"
 }
 
-projects = ["Project Alpha", "Project Beta", "Project Delta", "Project Titan"]
-team_members = ["Ali Khan", "Zainab Ahmed", "Bilal Siddiqui", "Hamza Usman"]
+projects = ["MCB BANK LIMITED", "BANK ALFLAH", "MCB ISLAMIC BANK", "HBL BANK LIMITED"]
+team_members = ["MOHSIN ABBAS", "MEHBOOB ALAM", "AMAN ULLAH", "AKHLAQ ZAR"]
 
 # ---- INPUT FORM ----
 with st.form("complaint_form", clear_on_submit=True):
@@ -39,7 +39,7 @@ with st.form("complaint_form", clear_on_submit=True):
     st.text_input("Branch Name (Automated):", value=b_name, disabled=True)
     
     # Generator Details
-    capacity = st.text_input("Generator Capacity:")
+    capacity = st.text_input("Generator Capacity:20 KVA")
     rating = st.text_input("Generator Rating:")
     
     # Assigned Team Member Dropdown
