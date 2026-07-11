@@ -287,19 +287,6 @@ Operation & Maintenance | Electrical | Mechanical | Solar Solutions
 </center>
 
 """,unsafe_allow_html=True)
-     logo.png
-     hero.jpg
-     about.jpg
-     power.jpg
-     machinery.jpg
-     solar.jpg
-     parts.jpg
-     engines.jpg
-     construction.jpg
-    /* ==========================================
-   F&A ENTERPRISES
-   Professional Corporate Theme
-========================================== */
 
 html, body, [class*="css"] {
     font-family: "Segoe UI", Arial, sans-serif;
