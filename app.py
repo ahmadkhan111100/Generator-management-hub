@@ -313,7 +313,8 @@ footer{
 .toptext{
     padding-top:15px;
     text-align:center;
-}.toptext h1{
+}
+.toptext h1{
     color:#111;
     font-size:42px;
     font-weight:800;
