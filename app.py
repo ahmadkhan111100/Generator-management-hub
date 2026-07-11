@@ -1,11 +1,8 @@
-company_website/
-├── app.py
-├── style.css
-├── images/
-│      logo.png
-│      hero.jpg
-│
-└── pages/
+import streamlit as st
+
+st.set_page_config(layout="wide")
+
+st.title("PRODUCTS")
 import streamlit as st
 from PIL import Image
 import base64
