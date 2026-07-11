@@ -221,16 +221,17 @@ color:#111;
 .menu{
 display:flex;
 justify-content:center;
-gap:40px;
-padding:15px;
-background:#FFC300;
-font-weight:bold;
+.menu{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    padding:15px;
+    background:#FFC300;
 }
 
 .menu a{
-text-decoration:none;
-color:black;
-font-size:18px;
+    text-decoration:none;
+    color:black;
 }
 
 .menu a:hover{
