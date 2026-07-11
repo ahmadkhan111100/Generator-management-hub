@@ -291,7 +291,7 @@ generator-management-hub/
 images/
 requirements.txt
 documents/
-└── images/
+images/
     ├── logo.png
     ├── hero.jpg
     ├── about.jpg
