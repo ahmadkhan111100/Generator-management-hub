@@ -287,7 +287,6 @@ Operation & Maintenance | Electrical | Mechanical | Solar Solutions
 </center>
 
 """,unsafe_allow_html=True)
-generator-management-hub/
 images/
 requirements.txt
 documents/
