@@ -1,5 +1,4 @@
 company_website/
-│
 ├── app.py
 ├── style.css
 ├── images/
