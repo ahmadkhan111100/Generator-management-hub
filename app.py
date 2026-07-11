@@ -53,7 +53,6 @@ with st.form("complaint_form", clear_on_submit=True):
     
     # Submit Button
     submitted = st.form_submit_button("Submit & Send SMS Alert")
-
     else:
         # Data structure for saving
         new_data = {
