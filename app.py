@@ -1,132 +1,360 @@
+company_website/
+│
+├── app.py
+├── style.css
+├── images/
+│      logo.png
+│      hero.jpg
+│
+└── pages/
 import streamlit as st
-import pandas as pd
-from datetime import datetime
-import os
+from PIL import Image
+import base64
 
-# Page configuration
-st.set_page_config(page_title="Complaint Workflow Hub", page_icon="📝", layout="centered")
+st.set_page_config(
+    page_title="F&A Enterprises",
+    page_icon="⚡",
+    layout="wide"
+)
 
-st.title("📋 Complaint Management Workflow")
-st.write("Pehle data enter karein, phir review tab mein ja kar data check karke Final Save karein.")
+# Load CSS
+with open("style.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# 1. BACKUP PROFORMA DATA
-branch_proforma = {
-    "1520": "Lahore Main Office",
-    "1545": "Karachi Saddar Branch",
-    "1680": "Islamabad Blue Area",
-    "0620": "Faisalabad Clock Tower",
-    "5009": "Multan Cantt Branch"
+
+# --------------------------
+# Header
+# --------------------------
+
+col1,col2,col3=st.columns([2,6,2])
+
+with col1:
+    st.image("images/logo.png", width=200)
+
+with col2:
+    st.markdown(
+    """
+    <div class='toptext'>
+    <h2>LET'S DO THE WORK.</h2>
+    </div>
+    """,
+    unsafe_allow_html=True
+    )
+
+with col3:
+    st.write("📞 +92-300-0000000")
+    st.write("✉ info@faenterprises.com")
+
+
+st.markdown("---")
+
+# Navigation
+
+menu="""
+<div class="menu">
+<a href="#">HOME</a>
+<a href="#">COMPANY</a>
+<a href="#">PRODUCTS</a>
+<a href="#">SERVICES</a>
+<a href="#">PROJECTS</a>
+<a href="#">CONTACT</a>
+</div>
+"""
+
+st.markdown(menu, unsafe_allow_html=True)
+
+# -----------------------
+# Hero Image
+# -----------------------
+
+st.image("images/hero.jpg", use_container_width=True)
+
+st.markdown(
+"""
+<div class='hero'>
+<h1>Operation & Maintenance Services</h1>
+
+<h3>Electrical | Mechanical | Engine Overhauling | Solar | Agriculture | Chemicals</h3>
+
+</div>
+""",
+unsafe_allow_html=True
+)
+
+st.markdown("<br>",unsafe_allow_html=True)
+
+# -------------------------
+# About
+# -------------------------
+
+st.header("About F&A Enterprises")
+
+st.write("""
+
+F&A Enterprises provides professional Operation &
+Maintenance solutions across Pakistan.
+
+✔ Electrical Works
+
+✔ Mechanical Works
+
+✔ Engine Overhauling
+
+✔ Solar Panel Supply
+
+✔ Solar Installation
+
+✔ Computer Accessories
+
+✔ Electronic Accessories
+
+✔ Industrial Chemicals
+
+✔ Agriculture Products
+
+""")
+
+# ----------------------------
+# Services
+# ----------------------------
+
+st.header("Our Services")
+
+col1,col2,col3=st.columns(3)
+
+with col1:
+
+    st.info("""
+⚡ Electrical Services
+
+• Installation
+
+• Maintenance
+
+• Troubleshooting
+
+• Power Systems
+
+""")
+
+with col2:
+
+    st.success("""
+⚙ Mechanical Services
+
+• Pumps
+
+• Motors
+
+• Compressors
+
+• Engine Overhauling
+
+""")
+
+with col3:
+
+    st.warning("""
+☀ Solar Solutions
+
+• Solar Panels
+
+• Installation
+
+• Maintenance
+
+• Hybrid Systems
+
+""")
+
+# --------------------------
+
+st.header("Products")
+
+col1,col2,col3,col4=st.columns(4)
+
+with col1:
+    st.metric("Electrical","150+")
+
+with col2:
+    st.metric("Mechanical","95+")
+
+with col3:
+    st.metric("Solar","80+")
+
+with col4:
+    st.metric("Agriculture","120+")
+
+
+st.markdown("---")
+
+st.header("Contact")
+
+name=st.text_input("Name")
+
+email=st.text_input("Email")
+
+message=st.text_area("Message")
+
+if st.button("Send Inquiry"):
+    st.success("Thank you! We will contact you soon.")
+
+
+st.markdown(
+"""
+<hr>
+
+<center>
+
+© 2026 F&A Enterprises
+
+</center>
+
+""",
+unsafe_allow_html=True
+)body{
+background:#ffffff;
 }
 
-project_list = ["<MCB BANK LIMITED", "HBL BANK LIMITED", "MCB ISLAMIC BANK LIMITED", "BANK LFALAH LIMITED"]
-team_list = ["Ali Khan", "Zainab Ahmed", "Bilal Siddiqui", "Hamza Usman"]
+.toptext{
+text-align:center;
+font-weight:bold;
+color:#111;
+}
 
-# Initialize Session State to hold data temporarily before final saving
-if "temp_data" not in st.session_state:
-    st.session_state.temp_data = None
+.menu{
+display:flex;
+justify-content:center;
+gap:40px;
+padding:15px;
+background:#FFC300;
+font-weight:bold;
+}
 
-# Create two tabs: One for Entry, One for Review & Final Save
-tab1, tab2 = st.tabs(["📝 1. Data Entry Form", "👀 2. Review & Save"])
+.menu a{
+text-decoration:none;
+color:black;
+font-size:18px;
+}
 
-# -----------------------------------------------------------------
-# TAB 1: DATA ENTRY FORUM
-# -----------------------------------------------------------------
-with tab1:
-    st.subheader("Nayi Complaint Ki Entry Karein")
-    
-    comp_date = st.date_input("Select Date:", datetime.today(), key="entry_date")
-    project = st.selectbox("Select Project Name:", [""] + project_list, key="entry_project")
-    b_code = st.selectbox("Select Branch Code:", [""] + list(branch_proforma.keys()), key="entry_bcode")
-    
-    # Automated Branch Name logic
-    b_name = branch_proforma.get(b_code, "")
-    st.text_input("Branch Name (Automated):", value=b_name, disabled=True, key="entry_bname")
-    
-    capacity = st.text_input("Generator Capacity (e.g., 50 KVA):", key="entry_capacity")
-    rating = st.text_input("Generator Rating (e.g., Prime / Standby):", key="entry_rating")
-    assigned_team = st.selectbox("Assign To (Team Member):", [""] + team_list, key="entry_team")
-    remarks = st.text_area("Remarks / Complaint Description:", key="entry_remarks")
-    
-    # Temporary hold data button
-    if st.button("Proceed to Review ➡️"):
-        if not (project and b_code and capacity and rating and assigned_team):
-            st.error("❌ Galti! Meharbani karke pehle tamam fields fill karein.")
-        else:
-            # Store data in session memory
-            st.session_state.temp_data = {
-                "Date": comp_date.strftime("%Y-%m-%d"),
-                "Project Name": project,
-                "Branch Code": b_code,
-                "Branch Name": b_name,
-                "Generator Capacity": capacity,
-                "Rating": rating,
-                "Assigned Team Member": assigned_team,
-                "Remarks": remarks
-            }
-            st.success("✅ Data temporary save ho gaya hai! Ab upar '2. Review & Save' tab par click karein.")
+.menu a:hover{
+color:#444;
+}
 
-# -----------------------------------------------------------------
-# TAB 2: REVIEW AND FINAL SAVE BUTTON
-# -----------------------------------------------------------------
-with tab2:
-    st.subheader("Entered Data Ka Review")
-    
-    if st.session_state.temp_data is None:
-        st.info("ℹ️ Abhi tak koi data enter nahi kiya gaya. Pehle pehle tab mein data enter karein.")
-    else:
-        data = st.session_state.temp_data
-        
-        # Display entered data clearly to the user
-        st.markdown(f"""
-        **Aap ka darj kiya hua data niche mojud hai:**
-        * 📅 **Date:** {data['Date']}
-        * 📁 **Project Name:** {data['Project Name']}
-        * 🔢 **Branch Code:** {data['Branch Code']}
-        * 🏢 **Branch Name:** {data['Branch Name']}
-        * ⚡ **Generator Capacity:** {data['Generator Capacity']}
-        * 📊 **Rating:** {data['Rating']}
-        * 👤 **Assigned To:** {data['Assigned Team Member']}
-        * 💬 **Remarks:** {data['Remarks'] if data['Remarks'] else 'None'}
-        """)
-        
-        st.markdown("---")
-        
-        # Final Save Button
-        if st.button("💾 Press to Final Save & Send SMS"):
-            # Prepare dataframe
-            df_new = pd.DataFrame([{
-                "Date": data["Date"],
-                "Project Name": data["Project Name"],
-                "Branch Code": data["Branch Code"],
-                "Branch Name": data["Branch Name"],
-                "Generator Capacity": data["Generator Capacity"],
-                "Rating": data["Rating"],
-                "Assigned Team Member": data["Assigned Team Member"],
-                "Remarks": data["Remarks"]
-            }])
-            
-            excel_file = "complaints.xlsx"
-            
-            # Save to Excel
-            if os.path.exists(excel_file):
-                df_old = pd.read_excel(excel_file)
-                df_final = pd.concat([df_old, df_new], ignore_index=True)
-            else:
-                df_final = df_new
-                
-            df_final.to_excel(excel_file, index=False)
-            
-            # Show Success message and SMS Preview
-            st.success("🎉 Mubarak ho! Data final Excel file mein save ho chuka hai.")
-            
-            st.markdown("### 📱 Dispatched SMS Preview")
-            st.info(f"""
-            **To:** {data['Assigned Team Member']}  
-            **Message:** Nayi complaint assign hui hai.  
-            * **Branch:** {data['Branch Name']} ({data['Branch Code']})  
-            * **Capacity/Rating:** {data['Generator Capacity']} / {data['Rating']}  
-            * **Remarks:** {data['Remarks'] if data['Remarks'] else 'None'}
-            """)
-            
-            # Clear memory after saving so form resets
-            st.session_state.temp_data = None
+.hero{
+position:absolute;
+top:270px;
+left:0;
+right:0;
+text-align:center;
+color:white;
+font-weight:bold;
+text-shadow:2px 2px 10px black;
+}
+
+.hero h1{
+font-size:60px;
+}
+
+.hero h3{
+font-size:25px;
+}
+
+h1,h2,h3{
+font-family:Arial;
+}
+
+.stButton button{
+background:#FFC300;
+color:black;
+font-weight:bold;
+border-radius:8px;
+}
+
+.stButton button:hover{
+background:#111;
+color:white;
+}pip install streamlit pillow
+streamlit run app.py
+project/
+│
+├── app.py
+├── images/
+│     power.jpg
+│     machinery.jpg
+│     solar.jpg
+│     parts.jpg
+│     engines.jpg
+│     construction.jpg
+    import streamlit as st
+
+st.set_page_config(layout="wide")
+
+st.markdown(
+"""
+<h1 style='text-align:center;'>PRODUCTS</h1>
+<hr style='width:80px;border:2px solid #f4b400;margin:auto;'>
+""",
+unsafe_allow_html=True
+)
+
+products = [
+    ("Power Systems", "images/power.jpg"),
+    ("Machinery", "images/machinery.jpg"),
+    ("Alternative Energy Solutions", "images/solar.jpg"),
+    ("CAT Genuine Parts", "images/parts.jpg"),
+    ("Engine Overhauling", "images/engines.jpg"),
+    ("Construction Equipment", "images/construction.jpg"),
+]
+
+for i in range(0, len(products), 3):
+
+    cols = st.columns(3)
+
+    for col, (title, img) in zip(cols, products[i:i+3]):
+
+        with col:
+
+            st.image(img, use_container_width=True)
+
+            st.markdown(
+                f"""
+                <div style="
+                    background:white;
+                    text-align:center;
+                    padding:20px;
+                    margin-top:-5px;
+                    font-size:30px;
+                    font-weight:500;
+                    box-shadow:0px 3px 12px rgba(0,0,0,0.15);
+                    border-radius:0px 0px 8px 8px;">
+                    {title}
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    .product-card{
+    transition:0.4s;
+}
+
+.product-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 30px rgba(0,0,0,.3);
+}
+---------------------------------------------
+               PRODUCTS
+---------------------------------------------
+
++----------------+----------------+----------------+
+|     Image      |     Image      |     Image      |
++----------------+----------------+----------------+
+| Power Systems  | Machinery      | Solar Energy   |
++----------------+----------------+----------------+
+
++----------------+----------------+----------------+
+|     Image      |     Image      |     Image      |
++----------------+----------------+----------------+
+| Genuine Parts  | Engine Repair  | Construction   |
++----------------+----------------+----------------+
