@@ -287,10 +287,6 @@ Operation & Maintenance | Electrical | Mechanical | Solar Solutions
 </center>
 
 """,unsafe_allow_html=True)
-generator-management-hub/
-requirements.txt
-documents/
-images/
      logo.png
      hero.jpg
      about.jpg
