@@ -312,7 +312,7 @@ footer{
 
 .toptext{
 .header{
-    padding-top:15px;
+padding-top:15px;
 }
 .toptext h1{
     color:#111;
