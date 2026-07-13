@@ -1,5 +1,15 @@
 QUOTATIONS
-[New Customer] [New Item] [Add] [Save] [Delete] [Invoice] [Print]
+quotation_system/
+
+app.py
+pages/
+    1_Quotation.py
+    2_Customers.py
+    3_Items.py
+
+database.py
+style.css
+requirements.txt
 
 Quotation No: ___________          Date: __________
 
