@@ -41,10 +41,10 @@ Grand Total
 
 [Save] [Print] [Export PDF]
 quotation_system/
-├── database.py
-├── quotation.py
-├── customer.py
-├── utils.py
-├── style.css
-├── requirements.txt
-└── database.db
+database.py
+quotation.py
+customer.py
+utils.py
+style.css
+requirements.txt
+database.db
