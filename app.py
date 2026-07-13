@@ -3,9 +3,9 @@ quotation_system/
 
 app.py
 pages/
-    1_Quotation.py
-    2_Customers.py
-    3_Items.py
+1_Quotation.py
+2_Customers.py
+3_Items.py
 
 database.py
 style.css
