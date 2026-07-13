@@ -311,8 +311,8 @@ footer{
 ------------------------- */
 
 .toptext{
-padding-top:15px;
-margin-bottom:20px;
+.header{
+    padding-top:15px;
 }
 .toptext h1{
     color:#111;
