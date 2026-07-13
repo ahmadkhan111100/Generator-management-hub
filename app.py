@@ -1,5 +1,4 @@
- QUOTATIONS
-
+QUOTATIONS
 [New Customer] [New Item] [Add] [Save] [Delete] [Invoice] [Print]
 
 Quotation No: ___________          Date: __________
