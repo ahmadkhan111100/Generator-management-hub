@@ -41,7 +41,7 @@ Grand Total
 
 [Save] [Print] [Export PDF]
 quotation_system/
-├── app.py
+app.py
 ├── database.py
 ├── quotation.py
 ├── customer.py
