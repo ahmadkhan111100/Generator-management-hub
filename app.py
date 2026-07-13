@@ -1,4 +1,3 @@
----------------------------------------------------------------
  QUOTATIONS
 
 [New Customer] [New Item] [Add] [Save] [Delete] [Invoice] [Print]
