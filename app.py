@@ -2,7 +2,13 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 from datetime import datetime
-st.set_page_config(...)
+
+st.set_page_config(
+    page_title="F&A Generator Management System",
+    page_icon="⚡",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 # ============================================================
 # PART 1A-2
 # Sidebar, Dashboard & Navigation
