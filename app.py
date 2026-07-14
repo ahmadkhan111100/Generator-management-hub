@@ -37,7 +37,7 @@
     <!-- CSS Files -->
     <link href="https://v12.softsuitetech.com/paper/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://v12.softsuitetech.com/paper/css/paper-dashboard.css?v=2.0.0" rel="stylesheet" />
-    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <CSS Just for demo purpose, don't include it in your project -->
     <link href="https://v12.softsuitetech.com/paper/demo/demo.css" rel="stylesheet" />
     <style type="text/css">
         .card .card-body {
