@@ -42,7 +42,7 @@
     <style type="text/css">
         .card .card-body {
             padding: 0px 15px 10px 15px !important;
-        }
+    }
         .sidebar .sidebar-wrapper, .off-canvas-sidebar .sidebar-wrapper {
             position: relative;
             height: calc(100vh - 75px);
