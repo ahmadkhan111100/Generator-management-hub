@@ -1,18 +1,3 @@
-# ============================================================
-# F&A ENTERPRISES
-# Generator Operations Management System (GOMS)
-# app.py
-# Part 1A-1
-# ============================================================
-
-import streamlit as st
-import sqlite3
-import pandas as pd
-from datetime import datetime
-
-# -----------------------------
-# Streamlit Page Configuration
-# -----------------------------
 st.set_page_config(
     page_title="F&A Generator Management System",
     page_icon="⚡",
