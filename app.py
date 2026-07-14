@@ -115,7 +115,6 @@ def dashboard():
         ORDER BY id DESC
         LIMIT 10
     """, conn)
-
     st.dataframe(
         recent,
         use_container_width=True,
