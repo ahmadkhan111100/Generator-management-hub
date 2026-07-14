@@ -2,7 +2,7 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 from datetime import datetime
-import plotly.express as px
+pip install -r requirements.txt
 st.set_page_config(...)
 # ============================================================
 # PART 1A-2
